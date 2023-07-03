@@ -4,11 +4,13 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import me.xh.fileprovider.databinding.ActivityMainBinding
+import me.xh.fileprovider.utils.installBeforeN
+import me.xh.fileprovider.utils.installInN
 import me.xh.fileprovider.utils.string
+import me.xh.kit.toast.toast
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -39,9 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         val sharePictureFile = File(sharePicturePath)
         if (!sharePictureFile.exists()) {
-            Toast.makeText(
-                this, string(R.string.share_picture_file_not_found), Toast.LENGTH_SHORT
-            ).show()
+            toast(R.string.share_picture_file_not_found)
             return
         }
 
@@ -79,11 +79,9 @@ class MainActivity : AppCompatActivity() {
         try {
             startActivity(Intent.createChooser(intent, string(R.string.share_picture_title)))
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(
-                this, string(R.string.relevance_application_no_found), Toast.LENGTH_SHORT
-            ).show()
+            toast(R.string.relevance_application_no_found)
         } catch (e: Exception) {
-            Toast.makeText(this, string(R.string.share_picture_failure), Toast.LENGTH_SHORT).show()
+            toast(R.string.share_picture_failure)
         }
     }
 
@@ -93,33 +91,15 @@ class MainActivity : AppCompatActivity() {
 
         val installApkFile = File(installApkPath)
         if (!installApkFile.exists()) {
-            Toast.makeText(
-                this, string(R.string.install_apk_file_not_found), Toast.LENGTH_SHORT
-            ).show()
+            toast(R.string.install_apk_file_not_found)
             return
         }
-        val installApkUri =
-            FileProvider.getUriForFile(
-                this, "${BuildConfig.APPLICATION_ID}.fileProvider", installApkFile
-            )
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(installApkUri, "application/vnd.android.package-archive")
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            }
-
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-
-        try {
-            startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            Toast.makeText(
-                this, string(R.string.relevance_application_no_found), Toast.LENGTH_SHORT
-            ).show()
-        } catch (e: Exception) {
-            Toast.makeText(this, string(R.string.install_apk_failure), Toast.LENGTH_SHORT).show()
+        // 这里需要区分 Android 版本，低版本的手机安装用的Uri需要通过Uri.fromFile()获取，不然会报错，奇怪
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            installInN(this, installApkFile)
+        } else {
+            installBeforeN(this, installApkFile)
         }
     }
 }

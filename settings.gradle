@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "AndroidStorageAdaptation"
 include ':app'
 include ':fileprovider'
+include ':Kit'
