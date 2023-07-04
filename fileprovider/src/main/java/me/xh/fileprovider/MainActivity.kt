@@ -9,7 +9,7 @@ import androidx.core.content.FileProvider
 import me.xh.fileprovider.databinding.ActivityMainBinding
 import me.xh.fileprovider.utils.installBeforeN
 import me.xh.fileprovider.utils.installInN
-import me.xh.fileprovider.utils.string
+import me.xh.kit.res.string
 import me.xh.kit.toast.toast
 import java.io.File
 

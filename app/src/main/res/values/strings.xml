@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AndroidStorageAdaptation</string>
+
+    <string name="save_bitmap">保存图片</string>
+    <string name="request_storage_permission_be_refused">请求存储权限被拒绝</string>
+
+    <string name="bitmap_save_success">图片保存成功</string>
+    <string name="bitmap_save_failure">图片保存失败</string>
 </resources>
