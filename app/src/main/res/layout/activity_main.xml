@@ -12,4 +12,10 @@
         android:layout_height="wrap_content"
         android:text="@string/save_bitmap" />
 
+    <Button
+        android:id="@+id/btn_query_all_images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/query_all_images" />
+
 </LinearLayout>
