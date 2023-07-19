@@ -33,6 +33,8 @@ fun saveBitmapInQ(bitmap: Bitmap, bitmapName: String) {
         put(MediaStore.Images.ImageColumns.WIDTH, bitmap.width)
         // 设置图片高度
         put(MediaStore.Images.ImageColumns.HEIGHT, bitmap.height)
+        // 设置独占访问权限
+        put(MediaStore.Images.ImageColumns.IS_PENDING, 1)
     }
 
     val resolver = App.sInstance.contentResolver
@@ -41,6 +43,9 @@ fun saveBitmapInQ(bitmap: Bitmap, bitmapName: String) {
         resolver.openOutputStream(uri).use { os ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, os)
         }
+        cv.clear()
+        cv.put(MediaStore.Images.ImageColumns.IS_PENDING, 0)
+        resolver.update(uri, cv, null, null)
         toast(R.string.bitmap_save_success)
     } ?: run {
         toast(R.string.bitmap_save_failure)
